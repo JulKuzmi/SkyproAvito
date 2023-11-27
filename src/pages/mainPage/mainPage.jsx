@@ -14,8 +14,9 @@ import {
     SearchBtn,
     MainH2,
     MainContent,
+    SearchError,
 } from '../../components/styles/main/MainPage.styles';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import * as S from '../profile/ProfilePage.styles';
 import { Logo, SearchLogoMob } from '../../assets/icons/icons';
 import { ContentCards } from '../../components/styles/main/CardsItems.styles';
@@ -31,19 +32,21 @@ import {
 import { useAuthContext } from '../../components/context/AuthContext';
 import { MainContainer } from '../../components/styles/reusable/Usable.styles';
 import { NewAdvModal } from '../../components/modal/new-adv';
+import { selectAllAdsList } from '../../store/selectors/ads';
 
 const Main = () => {
     const { data } = useGetAllAdsQuery({});
     const { user } = useAuthContext();
 
-    // Поп-ап "Разместить объявление"
+    // "Разместить объявление"
     const [modalActive, setModalActive] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Filter text by search bar inputs
     const [searchText, setSearchText] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
+    const selectAllAds = useSelector(selectAllAdsList);
+    console.log('aaaaaaaaaaaaa', selectAllAds);
     const SearchProducts = async (data, keyword) => {
         const regex = new RegExp(keyword, 'i');
         const results = data.filter(
@@ -53,6 +56,16 @@ const Main = () => {
         setSearchResults(results);
         dispatch(setSearchParameters(results));
     };
+
+    useMemo(() => {
+        let searchResults = [...selectAllAds];
+        if (searchText !== '') {
+            searchResults = searchResults.filter((ad) =>
+                ad.title.toLowerCase().includes(searchText.toLowerCase()),
+            );
+        }
+        return setSearchResults(searchResults);
+    }, [selectAllAds, searchText]);
 
     const HandleSearchClick = (event) => {
         event.preventDefault();
@@ -127,6 +140,7 @@ const Main = () => {
                                 type="search"
                                 placeholder="Поиск"
                                 name="search-mob"
+                                onChange={(e) => setSearchText(e.target.value)}
                             />
                             <SearchBtn
                                 onClick={HandleSearchClick}
@@ -139,6 +153,10 @@ const Main = () => {
                     <MainContainer>
                         <MainH2>Объявления</MainH2>
                         <MainContent>
+                            {searchText !== '' &&
+                            searchResults?.length === 0 ? (
+                                <SearchError>Ничего не найдено</SearchError>
+                            ) : null}
                             <ContentCards>
                                 {searchResults === ''
                                     ? data.map((ad, index) => (
@@ -165,11 +183,6 @@ const Main = () => {
                                               isLoading={isLoading}
                                           />
                                       ))}
-
-                                {searchText !== '' &&
-                                searchResults?.length === 0
-                                    ? 'Ничего не найдено'
-                                    : null}
                             </ContentCards>
                         </MainContent>
                     </MainContainer>
