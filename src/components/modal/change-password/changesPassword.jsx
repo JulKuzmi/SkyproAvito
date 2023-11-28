@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogoSkyUrl from '../../../assets/images/logo-skypro.png';
 import ShowPassWordLogo from '../../../assets/images/view_show_icon_124811.png';
 import HidePassWordLogo from '../../../assets/images/view_hide_icon_124813.png';
 import * as S from './changesPassword.styles';
 import { useNavigate } from 'react-router-dom';
-import {
-    useChangePasswordMutation,
-    useRefreshTokenMutation,
-} from '../../services/adsApi';
+import { useChangePasswordMutation } from '../../services/adsApi';
 
 const ChangePasswordModal = ({ active, setActive }) => {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -15,9 +12,7 @@ const ChangePasswordModal = ({ active, setActive }) => {
     const [sendButtonDisabled, setSendButtonDisabled] = useState(true);
     const [changePassword, { error }] = useChangePasswordMutation();
     const [showPassword, setShowPassWord] = useState('password');
-
-    const [refreshToken] = useRefreshTokenMutation();
-
+    const [ErrorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     const handleShowPassword = () => {
@@ -41,16 +36,18 @@ const ChangePasswordModal = ({ active, setActive }) => {
 
     const handleChangePassword = async () => {
         if (!currentPassword || !newPassword) {
-            // setErrorMessage('Обязательные поля не заполнены');
+            setErrorMessage('Обязательные поля не заполнены');
             return;
         }
+
         const newPassData = {
             password_1: currentPassword,
             password_2: newPassword,
         };
-        await refreshToken();
+
         changePassword(newPassData);
         setSendButtonDisabled(true);
+
         navigate('/account', { replace: true });
     };
 

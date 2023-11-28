@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Main from './pages/mainPage/mainPage';
-import { AuthPage } from './pages/authPages/index';
+import { AuthPage } from './pages/authPage/AuthPage';
 import Profile from './pages/profile/profile';
 import { ProtectedRoute } from './components/protected-route/protectedRoute';
 import { NotFound } from './pages/notFound/404';
 import SellerProfile from './pages/seller-profile/sellerProfile';
-import { AdvPage } from './pages/advPage';
+import { AdvPage } from './pages/advPage/advPage';
 // import { useAuthContext } from './components/context/AuthContext';
 
 const AppRoutes = () => {

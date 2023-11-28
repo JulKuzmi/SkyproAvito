@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import * as S from './AdvEdi.style.js';
+import * as S from './AdvEdit.style.js';
 import { useParams } from 'react-router-dom';
 import {
     useDeleteAdvImagesMutation,
@@ -52,12 +52,10 @@ export const EditAdvModal = ({ active, setActive }) => {
             id: id,
         });
         setSaveButtonActive(false);
-        setActive(false);
     };
 
     const handleImgUpload = async (event) => {
         event.preventDefault();
-        await refreshToken();
         const selectedImg = event.target.files[0];
         setSelectedFile(event.target.files[0]);
         if (!selectedImg) {
@@ -66,21 +64,13 @@ export const EditAdvModal = ({ active, setActive }) => {
             const formData = new FormData();
             formData.append('file', selectedImg);
             uploadAdvImage({ formData, id });
-            setSaveButtonActive(true);
         }
     };
 
     const handleDeleteAdvImage = async (image) => {
         await refreshToken();
-        const userAnswer = console.log(
-            'Вы действительно хотите удалить фотографию товара?',
-        );
-        if (!userAnswer) {
-            return;
-        } else {
-            const data = { image, id };
-            deleteAdvImages(data);
-        }
+        const data = { image, id };
+        deleteAdvImages(data);
     };
 
     const handleAdTitleChange = (event) => {
@@ -99,7 +89,10 @@ export const EditAdvModal = ({ active, setActive }) => {
     };
 
     return (
-        <S.ContainerModal className={active ? 'active' : ''}>
+        <S.ContainerModal
+            className={active ? 'active' : ''}
+            onClick={() => setActive(false)}
+        >
             <S.ModalBlock
                 className={active ? 'active' : ''}
                 onClick={(e) => e.stopPropagation()}

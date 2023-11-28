@@ -18,9 +18,9 @@ export const NewAdvModal = ({ active, setActive }) => {
     const [imageSrc, setImageSrc] = useState([]);
     const [photoIsChosen, setPhotoIsChosen] = useState(false);
 
-    // Post Adv with photo
+    // пост с фоткой
     const [addNewAdvWithPic] = useAddNewAdvPicMutation({});
-    // Post Ad without photo
+    //    без фотки
     const [addNewAdvText] = useAddNewAdvTextMutation({});
 
     const [refreshToken] = useRefreshTokenMutation();
@@ -117,7 +117,6 @@ export const NewAdvModal = ({ active, setActive }) => {
 
                 addNewAdvText(newAdvData);
                 setSendButtonActive(false);
-                setActive(false);
                 return;
             }
             const formData = new FormData();
@@ -133,15 +132,16 @@ export const NewAdvModal = ({ active, setActive }) => {
             setActive(false);
         } catch (error) {
             console.error('Ошибка:', error);
-            setError(
-                error.message || 'Неизвестная ошибка обработки запроса к API',
-            );
+            setError(error.message || 'Неизвестная ошибка обработки запроса');
             setSendButtonActive(false);
         }
     };
 
     return (
-        <S.ContainerModal className={active ? 'active' : ''}>
+        <S.ContainerModal
+            className={active ? 'active' : ''}
+            onClick={() => setActive(false)}
+        >
             <S.ModalBlock
                 className={active ? 'active' : ''}
                 onClick={(e) => e.stopPropagation()}

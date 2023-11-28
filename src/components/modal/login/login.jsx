@@ -12,7 +12,7 @@ import { loginUser } from '../../../store/actions/creators/ads';
 export const AuthPage = () => {
     const dispatch = useDispatch();
     const { setUser, loginUserFn } = useAuthContext();
-    const [registerUser, { data }] = useRegisterUserMutation();
+    const [registerUser] = useRegisterUserMutation();
     const [isLoginMode, setIsLoginMode] = useState(true);
     const [email, setEmail] = useState('');
     const [city, setCity] = useState('');
@@ -22,11 +22,6 @@ export const AuthPage = () => {
     const [repeatPassword, setRepeatPassword] = useState('');
     const [error, setError] = useState(null);
     const [isAuthLoading, setIsAuthLoading] = useState(false);
-    console.log(
-        '🚀 ~ file: index.jsx:25 ~ AuthPage ~ isAuthLoading:',
-        isAuthLoading,
-    );
-
     const [showPassword, setShowPassWord] = useState('password');
 
     const location = useLocation();
@@ -73,8 +68,6 @@ export const AuthPage = () => {
         }
         try {
             setIsAuthLoading(true);
-            localStorage.clear();
-
             const userData = {
                 email,
                 password,
@@ -84,8 +77,8 @@ export const AuthPage = () => {
             };
             registerUser(userData);
             setUser(userData);
-            await loginUserFn({ email, password });
             setIsAuthLoading(false);
+            await loginUserFn({ email, password });
             navigate('/account', { replace: true });
         } catch (error) {
             console.error('Ошибка регистрации:', error);
@@ -230,6 +223,7 @@ export const AuthPage = () => {
                                 }}
                             />
                         </S.Inputs>
+
                         {error && <S.Error>{error}</S.Error>}
                         <S.Buttons>
                             <S.PrimaryButton
@@ -242,7 +236,7 @@ export const AuthPage = () => {
                                         city,
                                     })
                                 }
-                                disabled={true}
+                                disabled={isAuthLoading}
                             >
                                 Зарегистрироваться
                             </S.PrimaryButton>

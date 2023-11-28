@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { uploadTokens } from '../../store/actions/creators/adsCreators';
-import { useAuthContext } from '../context/AuthContext';
+// import { useAuthContext } from '../context/AuthContext';
 
 const baseQueryWithReauth = async (argc, api, extraOptions) => {
     const baseQuery = fetchBaseQuery({
         baseUrl: 'http://localhost:8090/',
-        prepareHeaders: (headers) => {
+        prepareHeaders: (headers, { getState }) => {
             const token = localStorage.getItem('access_token');
 
             console.debug('Токен из стора', { token });
@@ -22,11 +22,15 @@ const baseQueryWithReauth = async (argc, api, extraOptions) => {
     const forceLogout = () => {
         console.debug('Принудительная авторизация');
         api.dispatch(uploadTokens(null, null));
-        localStorage.clear();
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
         window.location.href = '/login';
     };
 
-    if (result?.status !== 401) {
+    if (result?.error?.status === 401) {
+        forceLogout();
+    }
+    if (result?.error?.status !== 401) {
         return result;
     }
 };
@@ -103,7 +107,6 @@ export const adsApi = createApi({
                 localStorage.setItem('user_register_name', response.name);
                 localStorage.setItem('user_register_surname', response.surname);
                 localStorage.setItem('user_register_phone', response.phone);
-                return response;
             },
         }),
         loginUser: builder.mutation({

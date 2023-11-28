@@ -10,12 +10,10 @@ import { useAuthContext } from '../../components/context/AuthContext';
 import { useRegisterUserMutation } from '../../components/services/adsApi';
 
 export const AuthPage = () => {
-    const { setUser, loginUserFn, user, authError } = useAuthContext();
-    const [registerUser, { error: registerError, data: registerData }] =
-        useRegisterUserMutation();
+    const { setUser, loginUserFn } = useAuthContext();
+    const [registerUser] = useRegisterUserMutation();
 
     const [isLoginMode, setIsLoginMode] = useState(true);
-
     const [email, setEmail] = useState('');
     const [city, setCity] = useState('');
     const [password, setPassword] = useState('');
@@ -25,14 +23,6 @@ export const AuthPage = () => {
     const [error, setError] = useState(null);
     const [isAuthLoading, setIsAuthLoading] = useState(false);
     const [showPassword, setShowPassWord] = useState('password');
-    const [emailError, setEmailError] = useState('Поле не может быть пустым');
-    const [passwordError, setPasswordError] = useState(
-        'Поле не может быть пустым',
-    );
-    const [information, setInf] = useState('');
-
-    const [emailDirty, setEmailDirty] = useState(false);
-    const [passwordDirty, setPasswordDirty] = useState(false);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -43,64 +33,31 @@ export const AuthPage = () => {
         setIsLoginMode(location.pathname === '/login');
     }, [location.pathname, isLoginMode]);
 
-    const blurHandler = (e) => {
-        switch (e.target.name) {
-            case 'email':
-                setEmailDirty(true);
-                break;
-            case 'password':
-                setPasswordDirty(true);
-                break;
+    const handleLogin = async () => {
+        if (!email || !password) {
+            setError('Пожалуйста, введите пароль и/или логин');
+            return;
         }
-    };
-
-    const emailHandler = (e) => {
-        setEmail(e.target.value);
-        setError(null);
-        let re = /^\S+@\S+\.\S+$/;
-
-        if (!re.test(String(e.target.value).toLowerCase())) {
-            setEmailError('Некорректный email');
+        try {
+            dispatch(loginUserAction);
             setIsAuthLoading(true);
-            if (!e.target.value) {
-                setEmailError('Поле не может быть пустым');
-                setIsAuthLoading(true);
-            }
-        } else {
-            setEmailError('');
-        }
-    };
+            const user_data = {
+                email,
+                password,
+            };
+            await loginUserFn(user_data);
 
-    const passwordHandler = (e) => {
-        setPassword(e.target.value);
-        setError(null);
-        if (!e.target.value) {
-            setPasswordError('Поле не может быть пустым');
-            setIsAuthLoading(true);
-        } else {
-            setPasswordError('');
+            setIsAuthLoading(false);
+            navigate('/account', { replace: true });
+        } catch (error) {
+            console.error('Ошибка регистрации:', error);
+            setError(error.message || 'Неизвестная ошибка при входе');
             setIsAuthLoading(false);
         }
     };
 
-    const handleLogin = async () => {
-        if (!email || !password) {
-            setError('Пожалуйста, введите пароль и/или логин');
-            setIsAuthLoading(true);
-            return;
-        }
-        dispatch(loginUserAction);
-        setIsAuthLoading(true);
-        const user_data = {
-            email,
-            password,
-        };
-        await loginUserFn(user_data);
-        setIsAuthLoading(false);
-    };
-
     const handleShowPassword = () => {
-        if (showPassword == 'password') {
+        if (showPassword === 'password') {
             setShowPassWord('text');
         } else {
             setShowPassWord('password');
@@ -117,20 +74,8 @@ export const AuthPage = () => {
             setError('Пароли не совпадают');
             return;
         }
-        setIsAuthLoading(true);
-        const userData = {
-            email,
-            password,
-            name,
-            city,
-            surname,
-        };
-        await registerUser(userData);
-        setIsAuthLoading(false);
-    };
-
-    useEffect(() => {
-        if (user) {
+        try {
+            setIsAuthLoading(true);
             const userData = {
                 email,
                 password,
@@ -138,34 +83,25 @@ export const AuthPage = () => {
                 city,
                 surname,
             };
-            navigate('/account', { replace: true });
+            registerUser(userData);
             setUser(userData);
-        } else if (!user) {
-            console.log('Logout');
-        } else {
-            console.log('ошибки');
+            setIsAuthLoading(false);
+            const user_data = {
+                email,
+                password,
+            };
+            await loginUserFn(user_data);
+            navigate('/account', { replace: true });
+        } catch (error) {
+            console.error('Ошибка регистрации:', error);
+            setError(error.message || 'Неизвестная ошибка регистрации');
+            setIsAuthLoading(false);
         }
-    }, [user, navigate]);
-
-    // Реавторазиация после регистрации
+    };
+    // лови ошибку!
     useEffect(() => {
-        if (registerData) {
-            navigate('/login', { replace: true });
-            setInf('Пользователь зарегистрирован! Авторизуйтесь!');
-        }
-    }, [registerData]);
-
-    // Отлавливаем ошибку
-    useEffect(() => {
-        if (authError) {
-            setError(authError.data.detail);
-            console.log('ошибка авторизации');
-        }
-        if (registerError) {
-            setError(registerError.data.message);
-            console.log('ошибка регистрации');
-        }
-    }, [authError, registerError]);
+        setError(null);
+    }, [isLoginMode, email, password, repeatPassword]);
 
     return (
         <S.PageContainer>
@@ -177,32 +113,24 @@ export const AuthPage = () => {
                 </Link>
                 {isLoginMode ? (
                     <>
-                        {emailError && emailDirty && (
-                            <S.HandleInputErrorEmail>
-                                {emailError}
-                            </S.HandleInputErrorEmail>
-                        )}
                         <S.Inputs>
                             <S.ModalInput
                                 type="text"
-                                name="email"
+                                name="login"
                                 placeholder="email"
                                 value={email}
-                                onBlur={(e) => blurHandler(e)}
-                                onChange={(e) => emailHandler(e)}
+                                onChange={(event) => {
+                                    setEmail(event.target.value);
+                                }}
                             />
-                            {passwordError && passwordDirty && (
-                                <S.HandleInputErrorPassword>
-                                    {passwordError}
-                                </S.HandleInputErrorPassword>
-                            )}
                             <S.ModalInput
                                 type={showPassword}
                                 name="password"
                                 placeholder="пароль"
                                 value={password}
-                                onBlur={(e) => blurHandler(e)}
-                                onChange={(e) => passwordHandler(e)}
+                                onChange={(event) => {
+                                    setPassword(event.target.value);
+                                }}
                             />
                             <S.ShowPasswordLogoLogin
                                 onClick={handleShowPassword}
@@ -213,10 +141,8 @@ export const AuthPage = () => {
                                 }
                             />
                         </S.Inputs>
-                        {error && <S.Error>Ошибка: {error}</S.Error>}
-                        {information && (
-                            <S.Information>{information}</S.Information>
-                        )}
+                        {error && <S.Error>{error}</S.Error>}
+
                         <S.Buttons>
                             <S.PrimaryButton
                                 onClick={() => handleLogin({ email, password })}
@@ -235,32 +161,24 @@ export const AuthPage = () => {
                     </>
                 ) : (
                     <>
-                        {emailError && emailDirty && (
-                            <S.HandleInputErrorEmail>
-                                {emailError}
-                            </S.HandleInputErrorEmail>
-                        )}
                         <S.Inputs>
                             <S.ModalInput
                                 type="text"
-                                name="email"
+                                name="login"
                                 placeholder="email"
                                 value={email}
-                                onBlur={(e) => blurHandler(e)}
-                                onChange={(e) => emailHandler(e)}
+                                onChange={(event) => {
+                                    setEmail(event.target.value);
+                                }}
                             />
-                            {passwordError && passwordDirty && (
-                                <S.HandleInputErrorPassword>
-                                    {passwordError}
-                                </S.HandleInputErrorPassword>
-                            )}
                             <S.ModalInput
                                 type={showPassword}
                                 name="password"
                                 placeholder="Пароль"
                                 value={password}
-                                onBlur={(e) => blurHandler(e)}
-                                onChange={(e) => passwordHandler(e)}
+                                onChange={(event) => {
+                                    setPassword(event.target.value);
+                                }}
                             />
                             <S.ShowPasswordLogoSec
                                 onClick={handleShowPassword}
@@ -318,8 +236,7 @@ export const AuthPage = () => {
                             />
                         </S.Inputs>
 
-                        {error && <S.Error>Ошибка: {error}</S.Error>}
-
+                        {error && <S.Error>{error}</S.Error>}
                         <S.Buttons>
                             <S.PrimaryButton
                                 onClick={() =>

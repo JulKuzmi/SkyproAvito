@@ -21,7 +21,7 @@ import {
     MenuForm,
     ToMainButton,
 } from '../../components/styles/reusable/Usable.styles';
-import { NewAdvModal } from '../../components/modal/new-adv/index';
+import { NewAdvModal } from '../../components/modal/new-adv/newAdv';
 import ChangePasswordModal from '../../components/modal/change-password/changesPassword';
 
 const Profile = () => {

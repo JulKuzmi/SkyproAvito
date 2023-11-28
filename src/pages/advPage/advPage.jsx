@@ -20,7 +20,7 @@ import {
     useGetCurrentAdvQuery,
     useRefreshTokenMutation,
 } from '../../components/services/adsApi';
-import { NewAdvModal } from '../../components/modal/new-adv';
+import { NewAdvModal } from '../../components/modal/new-adv/newAdv';
 import { ReviewsModal } from '../../components/modal/reviews';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -32,6 +32,7 @@ export const AdvPage = () => {
     const { user } = useAuthContext();
     const { id } = useParams();
     const { data, isLoading } = useGetCurrentAdvQuery(id);
+    console.log(data);
     const [refreshToken] = useRefreshTokenMutation();
 
     const { data: advComments } = useGetAllCurrentUserCommentsQuery(id);
@@ -56,8 +57,6 @@ export const AdvPage = () => {
     };
     const handleSelectImg = (event) => {
         setSelectedImg(event.target.src);
-        const nextIndex = (nextImg + 1) % data?.images.length;
-        setNextImg(nextIndex);
     };
 
     const handleNextPhotoClick = () => {
@@ -156,15 +155,11 @@ export const AdvPage = () => {
                     <S.MainArticle>
                         <S.ArticleContent>
                             <S.ArticleLeft>
-                                <Link to="/">
-                                    <S.ArticleFillImgContent />
-                                </Link>
                                 {selectedImg === undefined && !isLoading ? (
                                     <S.Error>Фото отсутсвует</S.Error>
                                 ) : (
                                     ''
                                 )}
-
                                 <S.ArticleFillImg>
                                     {data?.images
                                         .slice(0, 1)
@@ -194,11 +189,6 @@ export const AdvPage = () => {
                                                             handleSelectImg
                                                         }
                                                         src={`http://localhost:8090/${image.url}`}
-                                                        className={
-                                                            nextImg === index
-                                                                ? 'selected'
-                                                                : ''
-                                                        }
                                                     />
                                                 </S.ArticleImgBarBox>
                                             ))}
@@ -258,8 +248,7 @@ export const AdvPage = () => {
                                             {adv ? adv.price : 'Загрузка..'}{' '}
                                             {data ? '₽' : ''}
                                         </S.ArticlePrice>
-                                        {user &&
-                                        user_data.id === adv.user.id ? (
+                                        {user_data.id === adv.user.id ? (
                                             <S.UsersUIBtnBlock>
                                                 <S.ArticleBtnEdit
                                                     disabled={deleted}

@@ -11,15 +11,14 @@ export const ContainerModal = styled.div`
     position: fixed;
     top: 0;
     left: 0;
-    transition: 0.3s;
+    transition: 0.5s;
     opacity: 0;
     pointer-events: none;
     &.active {
         opacity: 1;
         pointer-events: all;
-        z-index: 2;
     }
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 400px) {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -28,34 +27,33 @@ export const ContainerModal = styled.div`
         &.active {
             opacity: 1;
             pointer-events: all;
-            z-index: 2;
         }
     }
 `;
 
 export const ModalBlock = styled.div`
-position: absolute;
-z-index: 5;
-left: calc(50% - (600px / 2));
-opacity: 0;
-transition: 0.3s;
-pointer-events: none;
-&.active {
-  opacity: 1;
-  pointer-events: all;
-  z-index: 2;
-}
-@media screen and (max-width: 600px) {
-  position: absolute;
-  z-index: 5;
-  left: 0px;
-  opacity: 1;
-  &.active {
-    opacity: 1;
-    pointer-events: all;
-    z-index 2;
-  }
-}
+    position: absolute;
+    z-index: 5;
+    left: calc(50% - (600px / 2));
+    top: 22px;
+    opacity: 0;
+    transition: 0.5s;
+    pointer-events: none;
+    &.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+    @media screen and (max-width: 600px) {
+        position: absolute;
+        z-index: 5;
+        left: calc(50% - (400px / 2));
+        top: 0px;
+        opacity: 0;
+        &.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+    }
 `;
 
 export const ModalContent = styled.div`
@@ -91,7 +89,7 @@ export const ModalContent = styled.div`
         height: auto;
         padding: 30px 20px 30px;
     }
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 400px) {
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
@@ -103,7 +101,7 @@ export const ModalContent = styled.div`
         -webkit-box-align: start;
         -ms-flex-align: start;
         align-items: flex-start;
-        width: 100vw;
+        width: 100%;
         min-width: 320px;
         height: 100vh;
         padding: 30px 20px 30px;
@@ -127,6 +125,7 @@ export const ModalTitle = styled.h3`
     @media screen and (max-width: 600px) {
         font-size: 24px;
         line-height: 29px;
+        padding: 0 0 0 26px;
         position: relative;
         &:before {
             content: '';
@@ -140,28 +139,7 @@ export const ModalTitle = styled.h3`
             transform: rotate(-45deg);
             position: absolute;
             top: 9px;
-            left: -80px;
-            cursor: pointer;
-        }
-    }
-    @media screen and (max-width: 380px) {
-        font-size: 24px;
-        line-height: 29px;
-        position: relative;
-        left: -20px;
-        &:before {
-            content: '';
-            display: block;
-            width: 12px;
-            height: 12px;
-            background-color: transparent;
-            border-top: 2px solid #000000;
-            border-left: 2px solid #000000;
-            -webkit-transform: rotate(-45deg);
-            transform: rotate(-45deg);
-            position: absolute;
-            top: 9px;
-            left: -70px;
+            left: -76px;
             cursor: pointer;
         }
     }
@@ -175,7 +153,7 @@ export const ModalBtnCloseBox = styled.div`
     right: 50px;
     z-index: 3;
     cursor: pointer;
-    @media screen and (max-width: 400px) {
+    @media screen and (max-width: 600px) {
         display: none;
     }
 `;
@@ -291,9 +269,9 @@ export const FormLabelTextDescription = styled.textarea`
     line-height: 24px;
     color: #000000;
     padding-left: 19px;
-    padding-right: 5px;
     padding-top: 19px;
     resize: none;
+    font-size: 16px;
     line-height: 1;
     box-sizing: border-box;
     vertical-align: top;
@@ -556,10 +534,6 @@ export const FormNewArtPriceCover = styled.div`
     @media screen and (max-width: 600px) {
         position: relative;
         left: 330px;
-    }
-    @media screen and (max-width: 380px) {
-        position: relative;
-        left: 280px;
     }
 `;
 
