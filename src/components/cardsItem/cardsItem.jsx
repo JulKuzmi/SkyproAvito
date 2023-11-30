@@ -4,16 +4,15 @@ import {
     CardsContentBox,
     CardContentBox,
     CardImgBox,
-    // CardContainer,
     CardImage,
     CardTitle,
     CardPrice,
     CardPlace,
     CardDate,
     CardsCard,
+    Error,
 } from '../styles/main/CardsItems.styles';
 import 'react-loading-skeleton';
-// import SkeletonLoaderAds from '../skeleton/index';
 import Skeleton from 'react-loading-skeleton';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -31,6 +30,7 @@ export const CardsItem = ({
 
     useEffect(() => {
         if (!isLoading) {
+            // фоматировать дату с поста
             const date_post_adv = new Date(date);
             const calendarDateFormatWithTime = 'PPpp';
             const AdvPostDate = format(
@@ -53,7 +53,13 @@ export const CardsItem = ({
                     <CardsCard>
                         <CardImgBox>
                             <Link to={`/adv-page/${advId}`}>
-                                <CardImage src={picture} />
+                                {picture ===
+                                    'http://localhost:8090/undefined' &&
+                                !isLoading ? (
+                                    <Error>Фото отсутствует</Error>
+                                ) : (
+                                    <CardImage src={picture} />
+                                )}
                             </Link>
                         </CardImgBox>
 

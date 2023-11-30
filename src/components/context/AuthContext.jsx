@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
+    getUserData,
     logoutUser,
     uploadTokens,
 } from '../../store/actions/creators/adsCreators';
@@ -26,11 +27,13 @@ export const AuthProvider = ({ children }) => {
     });
 
     const dispatch = useDispatch();
-    const [loginUser] = useLoginUserMutation();
-    const [getCurrentUser] = useGetCurrentUserMutation();
 
+    const [loginUser, { error: authError }] = useLoginUserMutation();
+
+    const [getCurrentUser] = useGetCurrentUserMutation();
     const loginUserFn = async ({ email, password }) => {
         try {
+            localStorage.clear();
             const user_data = {
                 email,
                 password,
@@ -42,11 +45,11 @@ export const AuthProvider = ({ children }) => {
             const refresh_token = localStorage.getItem('refresh_token');
 
             dispatch(uploadTokens(access_token, refresh_token));
+            dispatch(getUserData(JSON.parse(currentUserData)));
             setUser(JSON.parse(currentUserData));
             setError(null);
-        } catch (error) {
-            setError(error.message);
-            throw error;
+        } catch (authError) {
+            setError(authError);
         }
     };
     const logoutUserFn = () => {
@@ -64,6 +67,7 @@ export const AuthProvider = ({ children }) => {
                 setError,
                 loginUserFn,
                 logoutUserFn,
+                authError,
             }}
         >
             {children}
