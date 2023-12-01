@@ -117,6 +117,7 @@ export const NewAdvModal = ({ active, setActive }) => {
 
                 addNewAdvText(newAdvData);
                 setSendButtonActive(false);
+                setActive(false);
                 return;
             }
             const formData = new FormData();
@@ -132,16 +133,15 @@ export const NewAdvModal = ({ active, setActive }) => {
             setActive(false);
         } catch (error) {
             console.error('Ошибка:', error);
-            setError(error.message || 'Неизвестная ошибка обработки запроса');
+            setError(
+                error.message || 'Неизвестная ошибка обработки запроса к API',
+            );
             setSendButtonActive(false);
         }
     };
 
     return (
-        <S.ContainerModal
-            className={active ? 'active' : ''}
-            onClick={() => setActive(false)}
-        >
+        <S.ContainerModal className={active ? 'active' : ''}>
             <S.ModalBlock
                 className={active ? 'active' : ''}
                 onClick={(e) => e.stopPropagation()}
