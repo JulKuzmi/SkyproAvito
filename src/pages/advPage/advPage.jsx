@@ -23,7 +23,7 @@ import {
 import { NewAdvModal } from '../../components/modal/new-adv/newAdv';
 import { ReviewsModal } from '../../components/modal/reviews';
 import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
+import 'react-loading-skeleton';
 import { EditAdvModal } from '../../components/modal/adv-edit/AdvEdit';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -32,7 +32,6 @@ export const AdvPage = () => {
     const { user } = useAuthContext();
     const { id } = useParams();
     const { data, isLoading } = useGetCurrentAdvQuery(id);
-    console.log(data);
     const [refreshToken] = useRefreshTokenMutation();
 
     const { data: advComments } = useGetAllCurrentUserCommentsQuery(id);
@@ -44,12 +43,12 @@ export const AdvPage = () => {
     const [deleted, setDeleted] = useState(false);
     const [formatDate, setFormatDate] = useState('');
     const [formatDateWithTime, setFormatDateWithTime] = useState('');
-    const [setUploadedImages] = useState([]);
-
+    const [uploadedImages, setUploadedImages] = useState([]);
+    //  "Post new Adv"
     const [modalActive, setModalActive] = useState(false);
-
+    //  "Reviews"
     const [modalActiveRevs, setModalActiveRevs] = useState(false);
-
+    //  "Edit adv"
     const [modalActiveEdit, setModalActiveEdit] = useState(false);
 
     const handleShowPhoneClick = () => {
@@ -57,6 +56,8 @@ export const AdvPage = () => {
     };
     const handleSelectImg = (event) => {
         setSelectedImg(event.target.src);
+        const nextIndex = (nextImg + 1) % data?.images.length;
+        setNextImg(nextIndex);
     };
 
     const handleNextPhotoClick = () => {
@@ -155,11 +156,15 @@ export const AdvPage = () => {
                     <S.MainArticle>
                         <S.ArticleContent>
                             <S.ArticleLeft>
+                                <Link to="/">
+                                    <S.ArticleFillImgContent />
+                                </Link>
                                 {selectedImg === undefined && !isLoading ? (
                                     <S.Error>Фото отсутсвует</S.Error>
                                 ) : (
                                     ''
                                 )}
+
                                 <S.ArticleFillImg>
                                     {data?.images
                                         .slice(0, 1)
@@ -189,6 +194,11 @@ export const AdvPage = () => {
                                                             handleSelectImg
                                                         }
                                                         src={`http://localhost:8090/${image.url}`}
+                                                        className={
+                                                            nextImg === index
+                                                                ? 'selected'
+                                                                : ''
+                                                        }
                                                     />
                                                 </S.ArticleImgBarBox>
                                             ))}
@@ -248,7 +258,8 @@ export const AdvPage = () => {
                                             {adv ? adv.price : 'Загрузка..'}{' '}
                                             {data ? '₽' : ''}
                                         </S.ArticlePrice>
-                                        {user_data.id === adv.user.id ? (
+                                        {user &&
+                                        user_data.id === adv.user.id ? (
                                             <S.UsersUIBtnBlock>
                                                 <S.ArticleBtnEdit
                                                     disabled={deleted}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import {
     Container,
@@ -14,6 +14,7 @@ import {
     SearchBtn,
     MainH2,
     MainContent,
+    SearchError,
 } from '../../components/styles/main/MainPage.styles';
 import { NavLink } from 'react-router-dom';
 import * as S from '../profile/ProfilePage.styles';
@@ -22,7 +23,7 @@ import { ContentCards } from '../../components/styles/main/CardsItems.styles';
 import { CardsItem } from '../../components/cardsItem/cardsItem';
 import { FooterAll } from '../../components/footer/footer';
 import { useGetAllAdsQuery } from '../../components/services/adsApi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import 'react-loading-skeleton';
 import {
     fetchSetAdsRequest,
@@ -31,6 +32,7 @@ import {
 import { useAuthContext } from '../../components/context/AuthContext';
 import { MainContainer } from '../../components/styles/reusable/Usable.styles';
 import { NewAdvModal } from '../../components/modal/new-adv/newAdv';
+import { selectAllAdsList } from '../../store/selectors/ads';
 
 const Main = () => {
     const { data } = useGetAllAdsQuery({});
@@ -44,6 +46,9 @@ const Main = () => {
     const [searchText, setSearchText] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
+    const selectAllAds = useSelector(selectAllAdsList);
+    console.log('  Main selectAllAds:', selectAllAds);
+
     const SearchProducts = async (data, keyword) => {
         const regex = new RegExp(keyword, 'i');
         const results = data.filter(
@@ -54,7 +59,17 @@ const Main = () => {
         dispatch(setSearchParameters(results));
     };
 
-    const HandleSearchClick = async (event) => {
+    useMemo(() => {
+        let searchResults = [...selectAllAds];
+        if (searchText !== '') {
+            searchResults = searchResults.filter((ad) =>
+                ad.title.toLowerCase().includes(searchText.toLowerCase()),
+            );
+        }
+        return setSearchResults(searchResults);
+    }, [selectAllAds, searchText]);
+
+    const HandleSearchClick = (event) => {
         event.preventDefault();
         SearchProducts(data, searchText);
     };
@@ -68,7 +83,7 @@ const Main = () => {
         }
     }, [data]);
 
-    // таймер для скелетона
+    // таймер для skeletona
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsLoading(false);
@@ -127,8 +142,12 @@ const Main = () => {
                                 type="search"
                                 placeholder="Поиск"
                                 name="search-mob"
+                                onChange={(e) => setSearchText(e.target.value)}
                             />
-                            <SearchBtn onClick={HandleSearchClick}>
+                            <SearchBtn
+                                onClick={HandleSearchClick}
+                                onKeyDown={HandleSearchClick}
+                            >
                                 Найти
                             </SearchBtn>
                         </SearchForm>
@@ -136,6 +155,10 @@ const Main = () => {
                     <MainContainer>
                         <MainH2>Объявления</MainH2>
                         <MainContent>
+                            {searchText !== '' &&
+                            searchResults?.length === 0 ? (
+                                <SearchError>Ничего не найдено</SearchError>
+                            ) : null}
                             <ContentCards>
                                 {searchResults === ''
                                     ? data.map((ad, index) => (
@@ -162,11 +185,6 @@ const Main = () => {
                                               isLoading={isLoading}
                                           />
                                       ))}
-
-                                {searchText !== '' &&
-                                searchResults?.length === 0
-                                    ? 'Ничего не найдено'
-                                    : null}
                             </ContentCards>
                         </MainContent>
                     </MainContainer>
