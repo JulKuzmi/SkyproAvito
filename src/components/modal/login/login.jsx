@@ -90,7 +90,7 @@ export const AuthPage = () => {
             setIsAuthLoading(false);
         }
     };
-    // лови ошибку
+
     useEffect(() => {
         setError(null);
     }, [isLoginMode, email, password, repeatPassword]);

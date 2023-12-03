@@ -62,7 +62,7 @@ const SellerProfile = () => {
             setSellerAds(sellerAds);
         }
     }, [allAds, user]);
-    // Помещаем в общий стор данные всех публикаций
+
     useEffect(() => {
         if (data) {
             dispatch(fetchSetCurrentUserAdsRequest(data));
@@ -71,7 +71,6 @@ const SellerProfile = () => {
 
     useEffect(() => {
         if (!isLoading) {
-            // format user sells from Date
             const date_sells_from = new Date(data.user.sells_from);
             const calendarDateFormat = 'PPP';
             const SellsFromDate = format(date_sells_from, calendarDateFormat, {

@@ -100,7 +100,7 @@ export const AuthPage = () => {
     };
 
     const handleShowPassword = () => {
-        if (showPassword == 'password') {
+        if (showPassword === 'password') {
             setShowPassWord('text');
         } else {
             setShowPassWord('password');
@@ -155,7 +155,7 @@ export const AuthPage = () => {
         }
     }, [registerData]);
 
-    // лови ошибку
+    // Отлавливаем ошибку
     useEffect(() => {
         if (authError) {
             setError(authError.data.detail);

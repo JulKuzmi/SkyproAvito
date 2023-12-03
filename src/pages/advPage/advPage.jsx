@@ -91,14 +91,13 @@ export const AdvPage = () => {
 
     useEffect(() => {
         if (!isLoading) {
-            // format user sells from Date
             const date_sells_from = new Date(adv.user.sells_from);
             const calendarDateFormat = 'PPP';
             const SellsFromDate = format(date_sells_from, calendarDateFormat, {
                 locale: ru,
             });
             setFormatDate(SellsFromDate);
-            // format adv date post from
+
             const date_post_adv = new Date(adv.created_on);
             const calendarDateFormatWithTime = 'PPpp';
             const AdvPostDate = format(

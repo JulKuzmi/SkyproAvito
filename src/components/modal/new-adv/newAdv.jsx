@@ -18,9 +18,8 @@ export const NewAdvModal = ({ active, setActive }) => {
     const [imageSrc, setImageSrc] = useState([]);
     const [photoIsChosen, setPhotoIsChosen] = useState(false);
 
-    // пост с фоткой
     const [addNewAdvWithPic] = useAddNewAdvPicMutation({});
-    //    без фотки
+
     const [addNewAdvText] = useAddNewAdvTextMutation({});
 
     const [refreshToken] = useRefreshTokenMutation();

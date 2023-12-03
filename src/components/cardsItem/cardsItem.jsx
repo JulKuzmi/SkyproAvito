@@ -30,7 +30,6 @@ export const CardsItem = ({
 
     useEffect(() => {
         if (!isLoading) {
-            // фоматировать дату с поста
             const date_post_adv = new Date(date);
             const calendarDateFormatWithTime = 'PPpp';
             const AdvPostDate = format(

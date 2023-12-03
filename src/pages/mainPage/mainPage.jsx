@@ -38,16 +38,13 @@ const Main = () => {
     const { data } = useGetAllAdsQuery({});
     const { user } = useAuthContext();
 
-    // Разместить объявлени
     const [modalActive, setModalActive] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    // фильтр поиска
     const [searchText, setSearchText] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
     const selectAllAds = useSelector(selectAllAdsList);
-    console.log('  Main selectAllAds:', selectAllAds);
 
     const SearchProducts = async (data, keyword) => {
         const regex = new RegExp(keyword, 'i');
