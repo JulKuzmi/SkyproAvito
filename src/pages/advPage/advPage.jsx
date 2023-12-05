@@ -23,7 +23,7 @@ import {
 import { NewAdvModal } from '../../components/modal/new-adv/newAdv';
 import { ReviewsModal } from '../../components/modal/reviews';
 import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { EditAdvModal } from '../../components/modal/adv-edit/AdvEdit';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -44,11 +44,11 @@ export const AdvPage = () => {
     const [formatDate, setFormatDate] = useState('');
     const [formatDateWithTime, setFormatDateWithTime] = useState('');
     const [uploadedImages, setUploadedImages] = useState([]);
-    //  "Post new Adv"
+
     const [modalActive, setModalActive] = useState(false);
-    //  "Reviews"
+
     const [modalActiveRevs, setModalActiveRevs] = useState(false);
-    //  "Edit adv"
+
     const [modalActiveEdit, setModalActiveEdit] = useState(false);
 
     const handleShowPhoneClick = () => {

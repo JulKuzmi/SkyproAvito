@@ -147,7 +147,6 @@ export const AuthPage = () => {
         }
     }, [user, navigate]);
 
-    // Реавторазиация после регистрации
     useEffect(() => {
         if (registerData) {
             navigate('/login', { replace: true });
@@ -155,7 +154,6 @@ export const AuthPage = () => {
         }
     }, [registerData]);
 
-    // Отлавливаем ошибку
     useEffect(() => {
         if (authError) {
             setError(authError.data.detail);

@@ -4,6 +4,7 @@ import ReviewItem from './reviewItem';
 import { useAddCommentMutation } from '../../services/adsApi';
 import { useParams } from 'react-router-dom';
 import { useAuthContext } from '../../context/AuthContext';
+import noAvatar from '../../../assets/images/myprofile.png';
 
 export const ReviewsModal = ({ active, setActive, comments, advId }) => {
     let { id } = useParams();
@@ -72,16 +73,18 @@ export const ReviewsModal = ({ active, setActive, comments, advId }) => {
                     <S.ModalScroll>
                         <S.ModalReviewsBox>
                             <S.ModalReview>
-                                {comments
-                                    ? comments.map((item, index) => (
-                                          <ReviewItem
-                                              text={item.text}
-                                              key={index}
-                                              avatar={`http://localhost:8090/${item.author.avatar}`}
-                                              author={item.author.name}
-                                          />
-                                      ))
-                                    : ''}
+                                {comments ? (
+                                    comments.map((item, index) => (
+                                        <ReviewItem
+                                            text={item.text}
+                                            key={index}
+                                            avatar={`http://localhost:8090/${item.author.avatar}`}
+                                            author={item.author.name}
+                                        />
+                                    ))
+                                ) : (
+                                    <S.ReviewImgImg src={noAvatar} alt="" />
+                                )}
                             </S.ModalReview>
                         </S.ModalReviewsBox>
                         {error && <S.Error>{error}</S.Error>}

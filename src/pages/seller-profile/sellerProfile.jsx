@@ -5,6 +5,7 @@ import { FooterAll } from '../../components/footer/footer';
 import { CardsItem } from '../../components/cardsItem/cardsItem';
 import { BackToBtn, Logo, SearchLogoMob } from '../../assets/icons/icons';
 import { useAuthContext } from '../../components/context/AuthContext';
+
 import {
     useGetAllAdsQuery,
     useGetCurrentAdvQuery,
@@ -30,12 +31,12 @@ const SellerProfile = () => {
     const { id } = useParams();
     const { data, isLoading } = useGetCurrentAdvQuery(id);
     const { data: allAds } = useGetAllAdsQuery({});
+    const [setAdv] = useState();
 
     const [showPhone, setShowPhone] = useState(false);
     const [sellerAds, setSellerAds] = useState([]);
     const [formatDate, setFormatDate] = useState('');
 
-    // Pop-up "post new adv"
     const [modalActive, setModalActive] = useState(false);
 
     const handleShowPhoneClick = () => {
@@ -47,7 +48,7 @@ const SellerProfile = () => {
         let idToNumber = parseInt(id);
         for (i = 0; i < data?.length; i++) {
             if (data[i].id === idToNumber) {
-                // setAdv(data[i]);
+                setAdv(data[i]);
                 break;
             }
         }

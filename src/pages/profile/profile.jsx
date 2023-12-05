@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import * as S from './ProfilePage.styles';
 import { Logo, SearchLogoMob } from '../../assets/icons/icons';
 import { Container, Header, Nav, PageContainer } from './ProfilePage.styles';
@@ -13,8 +13,8 @@ import {
     useUploadUserImageMutation,
 } from '../../components/services/adsApi';
 import { useAuthContext } from '../../components/context/AuthContext';
-
-import { useDispatch } from 'react-redux';
+import { selectCurrentUserAdsList } from '../../store/selectors/ads';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchSetCurrentUserAdsRequest } from '../../store/actions/creators/adsCreators';
 import {
     MainMenu,
@@ -25,11 +25,10 @@ import { NewAdvModal } from '../../components/modal/new-adv/newAdv';
 import ChangePasswordModal from '../../components/modal/change-password/changesPassword';
 
 const Profile = () => {
-    const { logoutUserFn } = useAuthContext();
+    const { logoutUserFn, user } = useAuthContext();
 
-    // Pop-up "post new adv"
     const [modalActive, setModalActive] = useState(false);
-    // Pop-up "change password"
+
     const [modalActiveChangePass, setModalChangePassActive] = useState(false);
 
     const { data, isLoading } = useGetCurrentUserAdvtQuery();

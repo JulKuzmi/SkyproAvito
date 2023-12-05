@@ -7,11 +7,11 @@ import {
     useGetCurrentAdvQuery,
     useRefreshTokenMutation,
     useUploadAdvImageMutation,
-    //   useUploadUserImageMutation,
+    useUploadUserImageMutation,
 } from '../../services/adsApi.jsx';
 import Skeleton from 'react-loading-skeleton';
 import deleteImg from '../../../assets/images/delete_btn.png';
-import 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export const EditAdvModal = ({ active, setActive }) => {
     const { id } = useParams();
@@ -26,7 +26,7 @@ export const EditAdvModal = ({ active, setActive }) => {
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [saveButtonActive, setSaveButtonActive] = useState(true);
-    const [setSelectedFile] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
     useEffect(() => {
         if (data) {
             setIsLoading(false);

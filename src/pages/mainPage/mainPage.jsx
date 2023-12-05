@@ -24,7 +24,7 @@ import { CardsItem } from '../../components/cardsItem/cardsItem';
 import { FooterAll } from '../../components/footer/footer';
 import { useGetAllAdsQuery } from '../../components/services/adsApi';
 import { useDispatch, useSelector } from 'react-redux';
-import 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import {
     fetchSetAdsRequest,
     setSearchParameters,
@@ -80,7 +80,6 @@ const Main = () => {
         }
     }, [data]);
 
-    // таймер для skeletona
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsLoading(false);

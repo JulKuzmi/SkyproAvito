@@ -12,7 +12,7 @@ import {
     CardsCard,
     Error,
 } from '../styles/main/CardsItems.styles';
-import 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import Skeleton from 'react-loading-skeleton';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
