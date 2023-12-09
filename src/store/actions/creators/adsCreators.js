@@ -2,7 +2,7 @@ import {
     CHANGE_PASSWORD,
     LOG_IN_USER,
     LOG_OUT_USER,
-    // SEARCH_TEXT,
+    SEARCH_TEXT,
     SEARCH_VALUE,
     SET_ADS,
     SET_ADS_FAILURE,

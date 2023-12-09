@@ -1,4 +1,4 @@
-import { UPLOAD_TOKENS } from '../actions/types/ads';
+import { UPLOAD_TOKENS } from '../actions/types/adsTypes';
 
 const initialState = {
     refreshToken: null,

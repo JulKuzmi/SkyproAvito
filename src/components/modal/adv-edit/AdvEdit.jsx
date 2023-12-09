@@ -7,7 +7,7 @@ import {
     useGetCurrentAdvQuery,
     useRefreshTokenMutation,
     useUploadAdvImageMutation,
-    // useUploadUserImageMutation,
+    useUploadUserImageMutation,
 } from '../../services/adsApi.jsx';
 import Skeleton from 'react-loading-skeleton';
 import deleteImg from '../../../assets/images/delete_btn.png';
@@ -52,10 +52,12 @@ export const EditAdvModal = ({ active, setActive }) => {
             id: id,
         });
         setSaveButtonActive(false);
+        setActive(false);
     };
 
     const handleImgUpload = async (event) => {
         event.preventDefault();
+        await refreshToken();
         const selectedImg = event.target.files[0];
         setSelectedFile(event.target.files[0]);
         if (!selectedImg) {
@@ -64,13 +66,21 @@ export const EditAdvModal = ({ active, setActive }) => {
             const formData = new FormData();
             formData.append('file', selectedImg);
             uploadAdvImage({ formData, id });
+            setSaveButtonActive(true);
         }
     };
 
     const handleDeleteAdvImage = async (image) => {
         await refreshToken();
-        const data = { image, id };
-        deleteAdvImages(data);
+        const userAnswer = alert(
+            'Вы действительно хотите удалить фотографию товара?',
+        );
+        if (!userAnswer) {
+            return;
+        } else {
+            const data = { image, id };
+            deleteAdvImages(data);
+        }
     };
 
     const handleAdTitleChange = (event) => {
@@ -89,10 +99,7 @@ export const EditAdvModal = ({ active, setActive }) => {
     };
 
     return (
-        <S.ContainerModal
-            className={active ? 'active' : ''}
-            onClick={() => setActive(false)}
-        >
+        <S.ContainerModal className={active ? 'active' : ''}>
             <S.ModalBlock
                 className={active ? 'active' : ''}
                 onClick={(e) => e.stopPropagation()}

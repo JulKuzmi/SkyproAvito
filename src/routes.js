@@ -4,7 +4,7 @@ import Main from './pages/mainPage/mainPage';
 import { AuthPage } from './pages/authPage/AuthPage';
 import Profile from './pages/profile/profile';
 import { ProtectedRoute } from './components/protected-route/protectedRoute';
-import { NotFound } from './pages/notFound/404';
+import { NotFound } from './pages/notFound/notFound';
 import SellerProfile from './pages/seller-profile/sellerProfile';
 import { AdvPage } from './pages/advPage/advPage';
 // import { useAuthContext } from './components/context/AuthContext';

@@ -7,12 +7,12 @@ import ShowPassWordLogo from '../../../assets/images/view_show_icon_124811.png';
 import HidePassWordLogo from '../../../assets/images/view_hide_icon_124813.png';
 import { useRegisterUserMutation } from '../../services/adsApi';
 import { useAuthContext } from '../../context/AuthContext';
-import { loginUser } from '../../../store/actions/creators/ads';
+import { loginUser } from '../../../store/actions/creators/adsCreators';
 
 export const AuthPage = () => {
     const dispatch = useDispatch();
     const { setUser, loginUserFn } = useAuthContext();
-    const [registerUser] = useRegisterUserMutation();
+    const [registerUser, { data }] = useRegisterUserMutation();
     const [isLoginMode, setIsLoginMode] = useState(true);
     const [email, setEmail] = useState('');
     const [city, setCity] = useState('');
@@ -22,6 +22,8 @@ export const AuthPage = () => {
     const [repeatPassword, setRepeatPassword] = useState('');
     const [error, setError] = useState(null);
     const [isAuthLoading, setIsAuthLoading] = useState(false);
+    console.log(' file:AuthPage isAuthLoading:', isAuthLoading);
+
     const [showPassword, setShowPassWord] = useState('password');
 
     const location = useLocation();
@@ -49,7 +51,7 @@ export const AuthPage = () => {
     };
 
     const handleShowPassword = () => {
-        if (showPassword == 'password') {
+        if (showPassword === 'password') {
             setShowPassWord('text');
         } else {
             setShowPassWord('password');
@@ -68,6 +70,8 @@ export const AuthPage = () => {
         }
         try {
             setIsAuthLoading(true);
+            localStorage.clear();
+
             const userData = {
                 email,
                 password,
@@ -77,8 +81,8 @@ export const AuthPage = () => {
             };
             registerUser(userData);
             setUser(userData);
-            setIsAuthLoading(false);
             await loginUserFn({ email, password });
+            setIsAuthLoading(false);
             navigate('/account', { replace: true });
         } catch (error) {
             console.error('Ошибка регистрации:', error);
@@ -86,7 +90,7 @@ export const AuthPage = () => {
             setIsAuthLoading(false);
         }
     };
-    // Отлавливаем ошибку
+
     useEffect(() => {
         setError(null);
     }, [isLoginMode, email, password, repeatPassword]);
@@ -223,7 +227,6 @@ export const AuthPage = () => {
                                 }}
                             />
                         </S.Inputs>
-
                         {error && <S.Error>{error}</S.Error>}
                         <S.Buttons>
                             <S.PrimaryButton
@@ -236,7 +239,7 @@ export const AuthPage = () => {
                                         city,
                                     })
                                 }
-                                disabled={isAuthLoading}
+                                disabled={true}
                             >
                                 Зарегистрироваться
                             </S.PrimaryButton>

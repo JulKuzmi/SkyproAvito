@@ -1,70 +1,58 @@
-# Getting Started with Create React App
+# Проект, сайт аналог Авито
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Примечания по запуску и командам проектра
 
-## Available Scripts
-
-In the project directory, you can run:
+Запуск проекта:
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Важная информация
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Проект развернут в docker по адресу [http://localhost:3000], бэкэнд расположен по адресу: [http://localhost:8090], для бэкэнда используется Swagger UI API, с которым проект непосредственно связан.
 
-### `npm test`
+## Язык проекта
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<div id="socials" aligh="center">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" title="js" width="40" height="40"/>&nbsp;
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" title="html" width="40" height="40"/>&nbsp;
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" title="css" width="40" height="40"/>&nbsp;
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" title="react" width="40" height="40"/>&nbsp;
+</div>
 
-### `npm run build`
+## Стэк библиотек проекта
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+React
+React Scripts
+React Router Dom
+React Redux
+Styled Components
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Структура проекта
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Страница Авторизации и регистрации:
 
-### `npm run eject`
+- на данной странице пользователь имеет возможность зарегистрироваться или войти в свой аккаунт
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. Главная страница:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- список объявлений
+- кнопка "Вход в личный кабинет"
+- окно поиска по объявлениям
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+3. Страница объявления:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- описание товара, цена, информация о продавце
+- кнопка "Показать телефон", при клике на которую пользователь может увидеть телефон продавца
+- кнопка "Вернуться на главную" ведет на главную страницу
 
-## Learn More
+4. Страница "Личный кабинет": (доступна только для авторизованного пользователя)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- кнопки для смены пароля
+- кнопка сохранить изменение о пользователе
+- список объявлений пользователя, ведет на страницу объявления
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+5. Страница "Профиль продавца":
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- кнопка "Вернуться на главную" ведет на главную страницу
+- информация о пользователе
+- список объявлений пользователя, ведет на страницу объявления

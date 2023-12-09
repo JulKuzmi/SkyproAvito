@@ -355,3 +355,10 @@ export const Error = styled.div`
     margin-top: 20px;
     text-align: left;
 `;
+export const ReviewImgImg = styled.img`
+    display: block;
+    width: 100%;
+    height: auto;
+    -o-object-fit: cover;
+    object-fit: cover;
+`;
